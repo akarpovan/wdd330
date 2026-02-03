@@ -1,8 +1,8 @@
 {
-  "name": "outside",
-  "version": "2.0.0",
-  "description": "Boilerplate for WDD 330 SleepOutside project",
-  "main": "main.js",
+  "name": "language-learning-companion",
+  "version": "1.0.0",
+  "description": "Web application for learning English with quotes and vocabulary tools",
+  "main": "main.mjs",
   "scripts": {
     "start": "vite",
     "build": "vite build --emptyOutDir",
@@ -11,7 +11,14 @@
     "test": "jest",
     "preview": "vite preview"
   },
-  "author": "Shane Thompson",
+  "keywords": [
+    "english",
+    "learning",
+    "vocabulary",
+    "quotes",
+    "education"
+  ],
+  "author": "Anna Karpova",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.56.0",

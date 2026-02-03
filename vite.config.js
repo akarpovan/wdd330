@@ -1,33 +1,20 @@
-import { resolve } from "path";
-import { defineConfig } from "vite";
+import { resolve } from 'path';
 
-export default defineConfig({
-  root: "src/",
-
-  /*build: {
-    outDir: "../dist",
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, "src/index.html"),
-        cart: resolve(__dirname, "src/cart/index.html"),
-        checkout: resolve(__dirname, "src/checkout/index.html"),
-        product: resolve(__dirname, "src/product_pages/index.html"),
-      },
-    },
-  },
-  */
+export default {
+  root: 'src',  // 'src' es la raíz
   build: {
-    outDir: "../dist",
+    outDir: '../dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "src/index.html"),
-        cart: resolve(__dirname, "src/cart/index.html"),
-        checkout: resolve(__dirname, "src/checkout/index.html"),
-        product: resolve(__dirname, "src/product_pages/index.html"),
-        header: resolve(__dirname, "src/public/partials/header.html"),
-        footer: resolve(__dirname, "src/public/partials/footer.html"),
-        product_listing: resolve(__dirname, "src/product_listing/index.html"),
-      },
-    },
+        main: resolve(__dirname, 'src/index.html'),
+        search: resolve(__dirname, 'src/search.html'),
+        favorites: resolve(__dirname, 'src/favorites.html'),
+        contact: resolve(__dirname, 'src/contact.html')
+      }
+    }
   },
-});
+  server: {
+    port: 5173,
+    open: true
+  }
+};
