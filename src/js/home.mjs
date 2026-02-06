@@ -6,7 +6,7 @@ export function initHomePage() {
 
     // 1. DOM elements from the "index.html" page
     const elements = {
-        quoteText: document.getElementById('quote-text'),
+        quoteContent: document.getElementById('quote-content'),
         quoteAuthor: document.getElementById('quote-author'),
         quoteTags: document.getElementById('quote-tags'),
         quoteAuthorSlug: document.getElementById('quote-authorSlug'),
@@ -24,18 +24,15 @@ export function initHomePage() {
     if (!elements.newQuoteButton || !elements.saveQuoteButton) {
         console.error('Error: elements are missing from the page.');
         // Message to the user
-        if (elements.quoteText) {
-            elements.quoteText.textContent = 'Error: page not configured correctly';
+        if (elements.quoteContent) {
+            elements.quoteContent.textContent = 'Error: page not configured correctly';
         }
         return; // leave
     }
 
+    //3. Declare variables 
     let actualQuote = null;
-    let actualCategory = 'inspirational'; //default
-
-    // 3. Configure events
-    elements.newQuoteButton.addEventListener('click', fetchNewQuote);
-    elements.saveQuoteButton.addEventListener('click', saveQuote);
+    let actualCategory = 'inspirational';
 
     // 4. Categories array
     const categories = [
@@ -45,6 +42,11 @@ export function initHomePage() {
         { id: 'success', name: 'Success' },
         { id: 'life', name: 'Life' }
     ];
+
+    function getCategoryName(categoryId) {
+        const category = categories.find(cat => cat.id === categoryId);
+        return category ? category.name : categoryId;
+    }
 
     // 5. Create category buttons
     if (elements.categoryButtons) {
@@ -67,13 +69,16 @@ export function initHomePage() {
                 // Change category and search for a new appointment
                 actualCategory = e.target.dataset.category;
                 if (elements.actualCategory) {
-                    const catName = categories.find(categ => categ.id === actualCategory)?.name || actualCategory;
-                    elements.actualCategory.textContent = catName;
+                    elements.actualCategory.textContent = getCategoryName(actualCategory);
                 }
                 fetchNewQuote();
             }
         });
     }
+
+    // 3. Configure events
+    elements.newQuoteButton.addEventListener('click', fetchNewQuote);
+    elements.saveQuoteButton.addEventListener('click', saveQuote);
 
     // 6. Load first appoinments
     fetchNewQuote();
@@ -83,16 +88,17 @@ export function initHomePage() {
         try {
             showLoading(true);
 
-            // Category API URL
+            // Build API URL
             let apiUrl = QUOTABLE_API;
             if (actualCategory && actualCategory !== 'random') {
-                apiUrl = `https://api.quotable.io/random?tags=${actualCategory}`;
+                apiUrl = `${QUOTABLE_API}?tags=${actualCategory}`;
             }
 
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`API error: ${response.status}`);
 
             const data = await response.json();
+
             actualQuote = {
                 content: data.content,
                 author: data.author,
@@ -106,14 +112,19 @@ export function initHomePage() {
             };
 
             displayQuote(actualQuote);
+
+            // Reset save button
+            elements.saveQuoteButton.textContent = 'Save quote to favorites';
+            elements.saveQuoteButton.disabled = false;
+
             showMessage('New quote loaded!', 'success');
 
         } catch (error) {
             console.error('Error:', error);
             showMessage('Failed to load quote', 'error');
             // Show supporting quote
-            if (elements.quoteText && elements.quoteAuthor) {
-                elements.quoteText.textContent = '"The journey of learning a language begins with a single word."';
+            if (elements.quoteContent && elements.quoteAuthor) {
+                elements.quoteContent.textContent = '"The journey of learning a language begins with a single word."';
                 elements.quoteAuthor.textContent = 'Author: Language Learning Companion';
             }
         } finally {
@@ -122,31 +133,57 @@ export function initHomePage() {
     }
 
     function displayQuote(quote) {
-        if (elements.quoteText) elements.quoteText.textContent = `"${quote.content}"`;
-        if (elements.quoteAuthor) elements.quoteAuthor.textContent = `Author: ${quote.author}`;
-        if (elements.quoteTags) elements.quoteTags.textContent = `Tags: ${quote.tags}`;
-        if (elements.quoteAuthorSlug) elements.quoteAuthorSlug.textContent = `AuthorSlug: ${quote.authorSlug}`;
-        if (elements.quoteLength) elements.quoteLength.textContent = `Length: ${quote.length}`;
-        if (elements.quoteDateAdded) elements.quoteDateAdded.textContent = `Date added: ${quote.dateAdded}`;
-        if (elements.quoteDateModified) elements.quoteDateModified.textContent = `Date modified: ${quote.dateModified}`;
-        if (elements.quoteDateNow) elements.quoteDateNow.textContent = `Current date: ${quote.dateNow}`;
-
+        // Update all quote details
+        if (elements.quoteContent) {
+            elements.quoteContent.textContent = `"${quote.content}"`;
+        }
+        if (elements.quoteAuthor) {
+            elements.quoteAuthor.textContent = `Author: ${quote.author}`;
+        }
+        if (elements.quoteTags) {
+            elements.quoteTags.textContent = `Tags: ${quote.tags.join(', ')}`;
+        }
+        if (elements.quoteAuthorSlug) {
+            elements.quoteAuthorSlug.textContent = `AuthorSlug: ${quote.authorSlug}`;
+        }
+        if (elements.quoteLength) {
+            elements.quoteLength.textContent = `Length: ${quote.length}`;
+        }
+        if (elements.quoteDateAdded) {
+            elements.quoteDateAdded.textContent = `Date added: ${quote.dateAdded}`;
+        }
+        if (elements.quoteDateModified) {
+            elements.quoteDateModified.textContent = `Date modified: ${quote.dateModified}`;
+        }
+        if (elements.quoteDateNow) {
+            elements.quoteDateNow.textContent = `Current date: ${quote.dateNow}`;
+        }
         if (elements.actualCategory) {
-            const catName = categories.find(categ => categ.id === quote.category)?.name || quote.category;
-            elements.actualCategory.textContent = catName;
+            elements.actualCategory.textContent = getCategoryName(quote.category);
         }
     }
 
     function saveQuote() {
         if (!actualQuote) return;
 
-        // Save to localStorage
+        /// Get favorites from localStorage
         const favorites = JSON.parse(localStorage.getItem('favoriteQuotes') || '[]');
-        favorites.push({
-            ...actualQuote,
+
+        // Create new favorite quote
+        const newFavorite = {
+            content: actualQuote.content,
+            author: actualQuote.author,
+            tags: actualQuote.tags,
+            authorSlug: actualQuote.authorSlug,
+            length: actualQuote.length,
+            dateAdded: actualQuote.dateAdded,
+            dateModified: actualQuote.dateModified,
+            category: actualQuote.category,
             id: Date.now(),
             savedAt: new Date().toISOString()
-        });
+        };
+
+        favorites.push(newFavorite);
         localStorage.setItem('favoriteQuotes', JSON.stringify(favorites));
 
         // Update button
@@ -180,11 +217,9 @@ export function initHomePage() {
         const msg = document.createElement('div');
         msg.className = `notification ${type}`;
         msg.textContent = text;
-
-        // Remove
         document.body.appendChild(msg);
 
-        // Delete
+        // Auto-remove after 3 seconds
         setTimeout(() => msg.remove(), 3000);
     }
 }

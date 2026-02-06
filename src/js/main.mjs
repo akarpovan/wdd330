@@ -6,17 +6,22 @@ async function initializeApp() {
     // Load header and footer on every page
     await loadHeaderFooter();
 
-    // Initialize page functionality
-    const path = window.location.pathname;
+    // Get current page name
+    const currentPage = window.location.pathname.split('/').pop();
 
-    if (path.includes('search.html')) {
-        initDictionaryPage();
-    } else if (path.includes('favorites.html')) {
-        initFavoritesPage();
-    } else if (path.includes('contact.html')) {
-        initContactPage();
-    } else {
-        initHomePage(); // home page
+    // Initialize page functionality based on current page
+    switch (currentPage) {
+        case 'search.html':
+            //initDictionaryPage();
+            break;
+        case 'favorites.html':
+            //initFavoritesPage();
+            break;
+        case 'contact.html':
+            //initContactPage();
+            break;
+        default:
+            initHomePage(); // home page
     }
 
     console.log('Language Learning Companion initialized');

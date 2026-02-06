@@ -14,7 +14,7 @@ const headerTemplate = `
                 <li><a href="index.html" class="nav-link"><img src="images/home.jpeg" alt="Home icon" width="32" height="32"> Home</a></li>
                 <li><a href="search.html" class="nav-link"><img src="images/dictionary.png" alt="Dictionary icon" width="32" height="32"> Dictionary</a></li>
                 <li><a href="favorites.html" class="nav-link"><img src="images/favorites.png" alt="Favorites icon" width="32" height="32"> Favorites</a></li>
-                <li><a href="contact.html" class="nav-link"><img src="images/contact.png" alt="Contact icon" width="32" height="32"> Contact</a></li>
+                <li><a href="contact.html" class="nav-link"><img src="images/contact.png" alt="Cantact icon" width="32" height="32"> Contact</a></li>
             </ul>
         </nav>
     </div>
@@ -23,10 +23,13 @@ const headerTemplate = `
 const footerTemplate = `
 <footer class="main-footer">
     <div class="container">
-        <p>©<span id="currentyear"></span> Language Learning Companion | 🇵🇪 🌄 🍲 Anna Karpova de Nuñez 🍲 🌄 🇵🇪 Lima, Perú</p>
-        <p><a href="" target="_blank">Project Video</a></p>
-        <p id="lastModified"></p>
-    </div>
+    <p>©<span id="currentyear"></span> Language Learning Companion | 🇵🇪 🌄 🍲 Anna Karpova de Nuñez 🍲 🌄 🇵🇪 Lima,
+        Perú</p>
+    <p><a href=""
+        target="_blank">Project
+        Video</a></p>
+    <p id="lastModified"></p>
+</div>
 </footer>`;
 
 function updateFooterDates() {
@@ -42,13 +45,18 @@ function updateFooterDates() {
     }
 }
 
-export function loadHeaderFooter() {
+export async function loadHeaderFooter() {
     // Insert header
     const headerElement = document.getElementById('main-header');
     if (headerElement) {
         headerElement.innerHTML = headerTemplate;
-        openMobileMenu();
-        activeLink();
+
+        // Wait for an event cycle for the DOM to update
+        setTimeout(() => {
+            console.log('Running openMobileMenu after insertion');
+            openMobileMenu();
+            activeLink();
+        }, 0);
     }
 
     // Insert footer
@@ -60,28 +68,58 @@ export function loadHeaderFooter() {
 }
 
 function openMobileMenu() {
+    // Find elements
     const menuButton = document.getElementById('menuToggle');
     const mobileMenu = document.getElementById('mainNav');
 
+    // If they don't exist, leave
     if (!menuButton || !mobileMenu) return;
 
+    // listener for clicks on the button ☰
     menuButton.addEventListener('click', function () {
-        // Toggle show class
-        mobileMenu.classList.toggle('show');
+        // Is the menu visible now?
+        const isMenuVisible = mobileMenu.classList.contains('show');
 
-        // Change icon based on state
-        menuButton.textContent = mobileMenu.classList.contains('show') ? '✕' : '☰';
+        if (isMenuVisible) {
+            // If it IS visible: HIDE
+            mobileMenu.classList.remove('show');
+            menuButton.textContent = '☰';
+        } else {
+            // If it is NOT visible: SHOW
+            mobileMenu.classList.add('show');
+            menuButton.textContent = '✕';
+        }
     });
 }
 
+function closeMobileMenu() {
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+
+    if (menuToggle && mainNav) {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mainNav.classList.remove('show');
+    }
+}
+
 function activeLink() {
-    // Get current page (use index.html if empty)
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    // Get the current file name
+    const currentPage = window.location.pathname.split('/').pop();
+
+    // Search all menu links
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Mark active link
+    // Check each link
     navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPage) {
+        const linkPage = link.getAttribute('href'); // "index.html"
+
+        // If it matches the current page, mark it as active.
+        if (linkPage === currentPage) {
+            link.classList.add('active');
+        }
+
+        // Special case: index.html in the root
+        if (currentPage === '' && linkPage === 'index.html') {
             link.classList.add('active');
         }
     });
