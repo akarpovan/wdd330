@@ -1,6 +1,9 @@
 // main module
 import { loadHeaderFooter } from './headerFooter.mjs';
 import { initHomePage } from './home.mjs';
+import { initDictionaryPage } from './dictionary.mjs';
+import { initFavoritesPage } from './favorites.mjs';
+import { initContactPage } from './contact.mjs';
 
 async function initializeApp() {
     // Load header and footer on every page
@@ -12,13 +15,13 @@ async function initializeApp() {
     // Initialize page functionality based on current page
     switch (currentPage) {
         case 'search.html':
-            //initDictionaryPage();
+            initDictionaryPage();
             break;
         case 'favorites.html':
-            //initFavoritesPage();
+            initFavoritesPage();
             break;
         case 'contact.html':
-            //initContactPage();
+            initContactPage();
             break;
         default:
             initHomePage(); // home page

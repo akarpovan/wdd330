@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dictionary Search - Language Learning Companion</title>
+    <title>Favorite Quotes - Language Learning Companion</title>
+    <meta name="description"
+        content="Anna Karpova's favorite quotes page for the project of BYU-Idaho WDD 330 - Web Frontend Development II course.">
+    <meta name="author" content="Anna Karpova de Nuñez">
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -21,7 +25,21 @@
             <p>Look up words for definitions and examples.</p>
         </section>
 
+        <section class="dict-section">
+            <div class="dict-box">
+                <input type="text" id="dict-input" placeholder="Enter an English word...">
+                <button id="dict-button" class="button-search button"> Search</button>
+            </div>
 
+            <div id="dict-results">
+                <!-- Results will appear here -->
+            </div>
+
+            <div id="loading" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->

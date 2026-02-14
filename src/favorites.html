@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Language Learning Companion</title>
+    <meta name="description"
+        content="Anna Karpova's dictionary search page for the project of BYU-Idaho WDD 330 - Web Frontend Development II course.">
+    <meta name="author" content="Anna Karpova de Nuñez">
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -14,9 +18,27 @@
 <body>
     <header id="main-header"></header>
 
-    <main>
+    <section class="hero">
+        <h1> My Favorite Quotes</h1>
+        <p>All the quotes that were saved for learning.</p>
+        <p class="favorites-count">You have <span id="favorites-count" class="favorites-count">0</span> saved quotes</p>
+    </section>
 
-    </main>
+    <section class="favorites-section">
+        <div class="favorites-actions">
+            <button id="export-button" class="export-all-button button"> Export All (.txt)</button>
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <h3>No favorite quotes yet</h3>
+            <p>Save quotes from the home page to see them here.</p>
+            <a href="index.html" class="btn secondary"> Go to Home</a>
+        </div>
+
+        <div id="favorites-container" class="favorites-container">
+            <!-- Favorites will be loaded here -->
+        </div>
+    </section>
 
     <footer id="main-footer"></footer>
 
