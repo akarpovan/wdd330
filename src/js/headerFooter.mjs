@@ -24,7 +24,7 @@ const footerTemplate = `
 <footer class="main-footer">
     <div class="container">
         <p>©<span id="currentyear"></span> Language Learning Companion | 🇵🇪 🌄 🍲 Anna Karpova de Nuñez 🍲 🌄 🇵🇪 Lima, Perú</p>
-        <p><a href="" target="_blank">Project Video</a></p>
+        <p><a href="https://drive.google.com/file/d/11L-qygkOWQO4un9uyg2VUQGYNBwCxSa0/view" target="_blank">Project Video</a></p>
         <p id="lastModified"></p>
     </div>
 </footer>`;

@@ -91,9 +91,9 @@ export function initDictionaryPage() {
                      ${wordData.phonetic ? `<p class="dict-phonetic">/${wordData.phonetic}/</p>` : ''}
                  </div>
                  ${meanings}
-                 <div class="dict-word-actions">
-                     <button class="button-pronounce button" data-word="${wordData.word}">Pronounce</button>
-                 </div>
+                <div class="dict-word-actions">
+                    <button class="button-pronounce button" data-word="${wordData.word}">Pronounce</button>
+                </div>
              </div>
          `;
 
@@ -121,10 +121,12 @@ export function initDictionaryPage() {
             utterance.rate = 0.8;
             speechSynthesis.speak(utterance);
             showMessage(`Pronouncing: ${word}`, 'info');
-        } else {
+        }
+        else {
             showMessage('Text-to-speech not supported in your browser.', 'warning');
         }
     }
+
 
     function showLoading(show) {
         elements.loading.classList.toggle('hidden', !show);
